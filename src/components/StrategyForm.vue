@@ -42,7 +42,7 @@ const formState = reactive({
   takeProfit: 3, takeProfitMax: 6,
   stopLoss: 10, stopLossMax: 20,
   maxPositions: 2, maxPositionsMax: 5,
-  allocation: 100, allocationMax: 100,
+  allocation: 20, allocationMax: 100,
 
   lightGbm: false,
   tft: false
