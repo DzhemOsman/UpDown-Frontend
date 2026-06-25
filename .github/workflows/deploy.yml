@@ -1,0 +1,29 @@
+name: Deploy Frontend to GCP
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Build & Deploy via SSH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Connect to GCP VM and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.GCP_HOST }}
+          username: ${{ secrets.GCP_USER }}
+          key: ${{ secrets.GCP_SSH_KEY }}
+
+          script: |
+            # In den Frontend-Ordner wechseln (Passe den Namen an, falls der Ordner auf der VM anders heißt)
+            cd ~/UpDown-Frontend
+            
+            # Neuesten Code aus GitHub herunterladen
+            git pull origin main
+            
+            # Docker anweisen, das Multi-Stage-Image neu zu bauen und den Nginx-Container ohne Downtime neu zu starten
+            docker compose up -d --build

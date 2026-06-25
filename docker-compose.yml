@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  updown-frontend:
+    container_name: updown-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - updown-net
+
+networks:
+  updown-net:
+    external: true
