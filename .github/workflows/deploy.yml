@@ -19,11 +19,8 @@ jobs:
           key: ${{ secrets.GCP_SSH_KEY }}
 
           script: |
-            # In den Frontend-Ordner wechseln (Passe den Namen an, falls der Ordner auf der VM anders heißt)
-            cd ~/UpDown-Frontend
+            cd ~/updown-frontend
             
-            # Neuesten Code aus GitHub herunterladen
             git pull origin master
             
-            # Docker anweisen, das Multi-Stage-Image neu zu bauen und den Nginx-Container ohne Downtime neu zu starten
             docker compose up -d --build
