@@ -25,6 +25,8 @@ FROM nginx:stable-alpine AS production-stage
 # Die fertig kompilierten Dateien aus der Build-Stage in den Nginx-Web-Ordner kopieren
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Port 80 nach außen freigeben
 EXPOSE 80
 
