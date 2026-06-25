@@ -23,7 +23,7 @@ jobs:
             cd ~/UpDown-Frontend
             
             # Neuesten Code aus GitHub herunterladen
-            git pull origin main
+            git pull origin master
             
             # Docker anweisen, das Multi-Stage-Image neu zu bauen und den Nginx-Container ohne Downtime neu zu starten
             docker compose up -d --build
