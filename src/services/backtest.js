@@ -40,6 +40,22 @@ const applyMoneyManagementParams = (payload, formData, strat) => {
 
 const runStrategy = (formData, strat, basePayload) => {
   const payload = { ...basePayload }
+
+  // --- NEU: Machine-Learning Interception ---
+  // Wenn es sich um ein ML-Modell handelt, bauen wir den Payload für den neuen
+  // Unified-Endpoint und senden ihn ab. Die alte Logik wird dadurch komplett übersprungen.
+  if (strat.is_ml) {
+    payload.strategy_name = strat.name
+    payload.is_lstm = strat.is_lstm
+    payload.is_lightgbm = strat.is_lightgbm
+    payload.hold_days = Number(formData.holdDays)
+    payload.take_profit_pct = Number(formData.takeProfit)
+
+    return api.runUnifiedBacktest(payload)
+  }
+  // ------------------------------------------
+
+  // --- BESTEHENDE LOGIK (100% UNANGETASTET) ---
   applyReversionParams(payload, formData)
 
   if (strat.isOld) {
