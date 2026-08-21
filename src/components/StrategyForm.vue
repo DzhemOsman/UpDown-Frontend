@@ -9,12 +9,16 @@ import ParameterInput from './ParameterInput.vue'
 
 const emit = defineEmits(['submit-strategy'])
 
-const STRATEGY_PRIORITY = ['kadane', 'sma', 'reversion']
+// NEU: lightGbm und lstm zur Prioritätenliste hinzugefügt, falls Comparison Mode deaktiviert wird
+const STRATEGY_PRIORITY = ['kadane', 'sma', 'reversion', 'lightGbm', 'lstm']
 
+// NEU: Die ML-Modelle als vollwertige Strategien registriert, damit resolveStrategies sie erfasst
 const STRATEGY_DESCRIPTORS = {
   reversion: {name: 'Old Reversion', isOld: true, is_kadane: false, is_trend: false},
   kadane: {name: 'Kadane', isOld: false, is_kadane: true, is_trend: false},
-  sma: {name: 'SMA', isOld: false, is_kadane: false, is_trend: true}
+  sma: {name: 'SMA', isOld: false, is_kadane: false, is_trend: true},
+  lightGbm: {name: 'LightGBM', is_ml: true, is_lightgbm: true, is_lstm: false},
+  lstm: {name: 'PyTorch LSTM', is_ml: true, is_lightgbm: false, is_lstm: true}
 }
 
 const STANDARD_MM = {name: 'Standard MM', isOld: false, is_kadane: false, is_trend: false}
@@ -44,8 +48,9 @@ const formState = reactive({
   maxPositions: 2, maxPositionsMax: 5,
   allocation: 20, allocationMax: 100,
 
+  // ML Flags (Bleiben für State-Kompatibilität erhalten, tft wurde zu lstm)
   lightGbm: false,
-  tft: false
+  lstm: false
 })
 
 const selectedStrategies = ref([])
@@ -97,7 +102,7 @@ const generateRange = (min, max, step = 1) => {
 const onSubmit = () => {
   const payload = {
     ...formState,
-    strategies: resolveStrategies()   // ersetzt useOldReversion / kadane / sma
+    strategies: resolveStrategies()   // Erfasst nun automatisch auch LightGBM & LSTM
   }
 
   if (formState.optimizerMode) {
@@ -250,12 +255,13 @@ const onSubmit = () => {
           />
         </CollapsibleSection>
       </div>
+
       <div class="pl-4">
         <CollapsibleSection title="Machine Learning" :disabled="isAdvancedDisabled" v-model="isMLOpen">
-          <ToggleRow label="LightGBM (Binary Tree)" tooltip="Ein Gradient-Boosting-Verfahren..."
-                     v-model="formState.lightGbm"/>
-          <ToggleRow label="Temporal Fusion Transformer" tooltip="Ein neuronales Netz speziell für Zeitreihen..."
-                     v-model="formState.tft"/>
+          <ToggleRow label="LightGBM (Binary Tree)" tooltip="Ein Gradient-Boosting-Verfahren für hochdimensionale Zeitreihen."
+                     :model-value="isSelected('lightGbm')" @update:model-value="toggleStrategy('lightGbm')"/>
+          <ToggleRow label="PyTorch LSTM" tooltip="Long Short-Term Memory neuronales Netz, optimiert für sequentielle Marktdaten."
+                     :model-value="isSelected('lstm')" @update:model-value="toggleStrategy('lstm')"/>
         </CollapsibleSection>
       </div>
     </div>

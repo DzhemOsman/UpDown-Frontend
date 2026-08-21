@@ -35,5 +35,8 @@ export default {
   },
   getPrediction(payload) {
     return apiClient.post('/predictions/predict', payload)
+  },
+  runUnifiedBacktest(payload) {
+      return apiClient.post('/strategy/backtest/unified', payload)
   }
 }
