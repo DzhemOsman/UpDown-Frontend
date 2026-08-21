@@ -164,10 +164,10 @@ const onSubmit = () => {
             />
           </label>
           <div class="flex items-center gap-2">
-            <input v-model="formState.startYear" type="number"
+            <input v-model="formState.startYear" type="number" min="0"
                    class="w-20 bg-slate-500/20 px-3 py-2 rounded-full border-none focus:outline-none text-center"/>
             <span class="text-slate-600">-</span>
-            <input v-model="formState.endYear" type="number"
+            <input v-model="formState.endYear" type="number" min ="0"
                    class="w-20 bg-slate-500/20 px-3 py-2 rounded-full border-none focus:outline-none text-center"/>
           </div>
         </div>
@@ -175,12 +175,12 @@ const onSubmit = () => {
         <div class="flex gap-3">
           <div class="flex-1">
             <label class="flex items-center gap-2 text-sm mb-2">Kapital ($)</label>
-            <input v-model="formState.initialCapital" type="number"
+            <input v-model="formState.initialCapital" type="number" min="0"
                    class="w-full bg-slate-500/20 px-4 py-2 rounded-full border-none focus:outline-none"/>
           </div>
           <div class="w-24">
             <label class="flex items-center gap-2 text-sm mb-2">Fee (%)</label>
-            <input v-model="formState.feePct" type="number" step="0.01"
+            <input v-model="formState.feePct" type="number" step="0.01" min="0"
                    class="w-full bg-slate-500/20 px-4 py-2 rounded-full border-none focus:outline-none"/>
           </div>
         </div>
